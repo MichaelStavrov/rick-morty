@@ -1,6 +1,6 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import AuthProvider from 'context/AuthProvider';
+import Providers from 'components/Providers';
 import { RoutesMap } from 'routesMap';
 import Home from 'pages/Home';
 import Locations from 'pages/Locations';
@@ -16,7 +16,7 @@ import PrivateRoutes from 'components/PrivateRoutes';
 
 function App() {
   return (
-    <AuthProvider>
+    <Providers>
       <Routes>
         <Route path={RoutesMap.home} element={<Home />}>
           <Route index element={<StartPage />} />
@@ -55,7 +55,7 @@ function App() {
         <Route path={RoutesMap.signIn} element={<SignIn />} />
         <Route path={RoutesMap.notFound} element={<NotFoundPage />} />
       </Routes>
-    </AuthProvider>
+    </Providers>
   );
 }
 

@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { forwardRef } from 'react';
 import { NavLink } from 'react-router-dom';
 import styles from './ListItem.module.scss';
 
@@ -8,11 +8,11 @@ interface ListItemProps {
   [key: string]: unknown;
 }
 
-const ListItem: FC<ListItemProps> = (data) => {
+const ListItem = forwardRef<HTMLLIElement, ListItemProps>((data, ref) => {
   const { id, name } = data;
 
   return (
-    <li>
+    <li ref={ref}>
       <NavLink
         style={({ isActive }) => (isActive ? { color: 'orange' } : {})}
         className={styles.item}
@@ -24,6 +24,6 @@ const ListItem: FC<ListItemProps> = (data) => {
       </NavLink>
     </li>
   );
-};
+});
 
 export default ListItem;

@@ -1,11 +1,14 @@
-import React, { CSSProperties, useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import parseDate from 'utils/parseDate';
+import React, { CSSProperties } from 'react';
+import useSortData from 'hooks/useSortData';
 import ListItem from '../ListItem';
 import styles from './List.module.scss';
+import useInfinityScroll, {
+  UseInfinityScrollProps,
+} from 'hooks/useInfinityScroll';
 
 interface ListProps<T> {
   data: T[];
+  infinityScroll: UseInfinityScrollProps;
   dir?: CSSProperties['flexDirection'];
 }
 
@@ -14,28 +17,22 @@ const List = <
 >({
   data,
   dir,
+  infinityScroll,
 }: ListProps<T>) => {
-  const [searchParams] = useSearchParams();
-  const [sortedData, setSortedData] = useState(data);
-
-  useEffect(() => {
-    const currentSort =
-      searchParams.get('sort') ?? localStorage.getItem('sort');
-
-    const newData = [...data].sort((a, b) =>
-      currentSort === 'ASC'
-        ? +parseDate(a.created) - +parseDate(b.created)
-        : +parseDate(b.created) - +parseDate(a.created)
-    );
-
-    setSortedData(newData);
-  }, [data, searchParams]);
+  const sortedData = useSortData(data);
+  const { lastElemRef, isError } = useInfinityScroll(infinityScroll);
 
   return (
     <ul className={styles.list} style={{ flexDirection: dir }}>
-      {sortedData.map(({ id, name, ...rest }) => (
-        <ListItem key={id} {...{ id, name }} {...rest} />
+      {sortedData.map(({ id, name, ...rest }, index) => (
+        <ListItem
+          ref={sortedData.length === index + 1 ? lastElemRef : undefined}
+          key={id}
+          {...{ id, name }}
+          {...rest}
+        />
       ))}
+      {isError && <span className={styles.emptyData}>Данных больше нет</span>}
     </ul>
   );
 };

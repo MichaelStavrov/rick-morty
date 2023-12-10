@@ -1,12 +1,12 @@
 import React from 'react';
-import characters from 'data/characters.json';
-import useData from 'hooks/useData';
+import useItemData from 'hooks/useItemData';
+import useFetchData from 'hooks/useFetchData';
 import makeCardData from 'utils/makeCardData';
 import Card from 'components/Card';
-import { CharacterData } from 'types';
 
 const Hero = () => {
-  const data = useData(characters as CharacterData[]);
+  const { heroes } = useFetchData('character');
+  const data = useItemData(heroes);
 
   if (!data) {
     return null;

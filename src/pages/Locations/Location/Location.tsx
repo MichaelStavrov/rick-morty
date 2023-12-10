@@ -1,12 +1,12 @@
 import React from 'react';
-import locations from 'data/location.json';
-import useData from 'hooks/useData';
+import useItemData from 'hooks/useItemData';
+import useFetchData from 'hooks/useFetchData';
 import makeCardData from 'utils/makeCardData';
 import Card from 'components/Card';
-import { LocationData } from 'types';
 
 const Location = () => {
-  const data = useData(locations as LocationData[]);
+  const { locations } = useFetchData('location');
+  const data = useItemData(locations);
 
   if (!data) {
     return null;
